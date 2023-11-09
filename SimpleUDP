@@ -20,7 +20,7 @@ func main() {
         fmt.Println("Error creating UDP connection:", err)
         return
     }
-    //close connection
+    //close connection (scheduled)
     defer conn.Close()
     message := "Testing"
 
