@@ -1,0 +1,40 @@
+options {
+    configure_links = true;
+    autostart = true;
+}
+
+nodes {
+    #Access point
+    ap1 = {
+        model = wifiap;
+        type = wireless;
+        position = 100,100,0;
+        icon = "router.png";
+    };
+    #clients
+    client1 = {
+        model = wifi-sta;
+        type = wireless;
+        position = 200,100,0;
+        icon = "laptop.png";
+    };
+    client2 = {
+        model = wifi-sta;
+        type = wireless;
+        position = 200,200,0;
+        icon = "laptop.png";
+    };
+}
+
+interfaces {
+    #interfaces for each node
+    wifiif1 = {node = ap1; type = wireless; mac = "00:00:00:00:00:01"; ssid = "MySSID"; channel = 1; ip4 = "127.0.0.1/24"; };
+    wifiif2 = {node = client1; type = wireless; mac = "00:00:00:00:00:02"; ssid = "MySSID"; channel = 1; ip4 = "127.0.0.2/24"; };
+    wifiif3 = {node = client2; type = wireless; mac = "00:00:00:00:00:03"; ssid = "MySSID"; channel = 1; ip4 = "127.0.0.3/24"; };
+}
+
+links {
+    #conneections between nodes
+    wireless_link1 = { nodes = { ap1 wifiif1; client1 wifiif2; } delay = "10ms"; loss = 0.1; }
+    wireless_link2 = { nodes = { ap1 wifiif1; client2 wifiif3; } delay = "10ms"; loss = 0.1; }
+}
