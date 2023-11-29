@@ -6,6 +6,15 @@ import (
 )
 
 func calculateBroadcastAddress(ip net.IP, subnetMask net.IPMask) net.IP {
+	// Ensure the IP and subnetMask are IPv4
+	ip = ip.To4()
+	subnetMask = subnetMask.Size() == net.IPv6len*8/2 && ip != nil
+
+	if ip == nil || subnetMask == nil {
+		fmt.Println("Invalid IPv4 address or subnet mask.")
+		return nil
+	}
+
 	// Invert the subnet mask
 	invertedSubnetMask := net.IP(subnetMask)
 	for i := range invertedSubnetMask {
@@ -13,12 +22,16 @@ func calculateBroadcastAddress(ip net.IP, subnetMask net.IPMask) net.IP {
 	}
 
 	// Calculate the broadcast address
-	broadcastAddress := make(net.IP, len(ip))
-	for i := range ip {
-		broadcastAddress[i] = ip[i] | invertedSubnetMask[i]
+	if len(ip) == len(invertedSubnetMask) {
+		broadcastAddress := make(net.IP, len(ip))
+		for i := range ip {
+			broadcastAddress[i] = ip[i] | invertedSubnetMask[i]
+		}
+		return broadcastAddress
 	}
 
-	return broadcastAddress
+	fmt.Println("Invalid IPv4 address or subnet mask lengths.")
+	return nil
 }
 
 func main() {
