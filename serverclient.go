@@ -91,7 +91,13 @@ func main() {
 			}
 
 			receivedMessage := string(buffer[:n])
-			fmt.Printf("Received message '%s' from %s\n", receivedMessage, addr)
+			// Ignore msgs from self
+			if !addr.IP.Equal(localIPv4) {
+			    fmt.Printf("Received message '%s' from %s\n", receivedMessage, addr)
+		        } else {
+		            fmt.Println("Ignoring message from self.")
+		        }
+			
 		}
 	}()
 
@@ -165,7 +171,7 @@ func main() {
 		// Start a goroutine to listen for user input
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
-			//change this behavior to periodically (we are using the scanner so we can control when the node sends msgs)
+			// Change this behavior to periodically (we are using the scanner so we can control when the node sends msgs)
 			message := scanner.Text() + strconv.Itoa(priority)
 			messageBytes := []byte(message)
 
