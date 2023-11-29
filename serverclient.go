@@ -41,12 +41,12 @@ func calculateBroadcastAddress(ip net.IP, subnetMask net.IPMask) net.IP {
 func main() {
 	// Set Priority
 	if len(os.Args) != 2 {
-		fmt.Println("Usage: ./program <target_port>")
+		fmt.Println("Usage: ./program <priority>")
 		return
 	}
 
-	// Parse the target port from command-line arguments
-	targetPort, err := strconv.Atoi(os.Args[1])
+	// Parse the prio from command-line arguments
+	priority, err := strconv.Atoi(os.Args[1])
 	if err != nil {
 		fmt.Println("Error parsing target port:", err)
 		return
