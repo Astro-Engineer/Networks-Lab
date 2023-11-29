@@ -40,6 +40,7 @@ func calculateBroadcastAddress(ip net.IP, subnetMask net.IPMask) net.IP {
 
 func main() {
 	// Set Priority
+	var priority int
 	if len(os.Args) != 2 {
 		fmt.Println("Usage: ./program <priority>")
 		return
