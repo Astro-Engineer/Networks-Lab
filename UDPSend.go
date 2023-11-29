@@ -73,6 +73,8 @@ func main() {
 
 	// Print the local IPv4 address
 	fmt.Printf("IPv4 broadcast address: %s\n", localIPv4)
+	// Print the subnet mask
+	fmt.Printf("IPv4 broadcast address: %s\n", subnetMask)
 	
 	// Calculate the broadcast address
 	broadcastIP := calculateBroadcastAddress(localIPv4, subnetMask)
