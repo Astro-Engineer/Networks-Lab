@@ -165,7 +165,8 @@ func main() {
 		// Start a goroutine to listen for user input
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
-			message := scanner.Text()
+			//change this behavior to periodically (we are using the scanner so we can control when the node sends msgs)
+			message := scanner.Text() + prioirty
 			messageBytes := []byte(message)
 
 			// Check if the user input is not empty
