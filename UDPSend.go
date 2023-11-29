@@ -22,14 +22,14 @@ func calculateBroadcastAddress(ip net.IP, subnetMask net.IPMask) net.IP {
 }
 
 func main() {
-	// Get the local network interface and address
+	// Get the local network interface and IPv4 address
 	interfaces, err := net.Interfaces()
 	if err != nil {
 		fmt.Println("Error:", err)
 		return
 	}
 
-	var localIP net.IP
+	var localIPv4 net.IP
 	var subnetMask net.IPMask
 
 	for _, iface := range interfaces {
@@ -44,24 +44,24 @@ func main() {
 			case *net.IPNet:
 				ip := v.IP
 				if ip.To4() != nil {
-					localIP = ip
+					localIPv4 = ip
 					subnetMask = v.Mask
 					break
 				}
 			}
 		}
-		if localIP != nil {
+		if localIPv4 != nil {
 			break
 		}
 	}
 
-	if localIP == nil {
-		fmt.Println("Could not find a suitable network interface.")
+	if localIPv4 == nil {
+		fmt.Println("Could not find a suitable IPv4 network interface.")
 		return
 	}
 
 	// Calculate the broadcast address
-	broadcastIP := calculateBroadcastAddress(localIP, subnetMask)
+	broadcastIP := calculateBroadcastAddress(localIPv4, subnetMask)
 	targetPort := 12345 // Arbitrary port
 
 	// UDP address creation
