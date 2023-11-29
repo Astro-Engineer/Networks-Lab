@@ -75,6 +75,9 @@ func main() {
 	broadcastIP := calculateBroadcastAddress(localIPv4, subnetMask)
 	targetPort := 12345 // Arbitrary port
 
+	// Print the target IPv4 address
+	fmt.Printf("Sending to IPv4 address: %s\n", broadcastIP)
+
 	// UDP address creation
 	targetAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", broadcastIP.String(), targetPort))
 	if err != nil {
