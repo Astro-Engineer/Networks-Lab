@@ -6,12 +6,10 @@ import (
 )
 
 func calculateBroadcastAddress(ip net.IP, subnetMask net.IPMask) net.IP {
-	// Ensure the IP and subnetMask are IPv4
+	// Ensure the IP is IPV4
 	ip = ip.To4()
-	subnetMask = subnetMask.Size() == net.IPv6len*8/2 && ip != nil
-
-	if ip == nil || subnetMask == nil {
-		fmt.Println("Invalid IPv4 address or subnet mask.")
+	if ip == nil {
+		fmt.Println("Invalid IPv4 address.")
 		return nil
 	}
 
