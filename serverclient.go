@@ -166,7 +166,7 @@ func main() {
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
 			//change this behavior to periodically (we are using the scanner so we can control when the node sends msgs)
-			message := scanner.Text() + priority
+			message := scanner.Text() + strconv.Itoa(priority)
 			messageBytes := []byte(message)
 
 			// Check if the user input is not empty
