@@ -71,6 +71,9 @@ func main() {
 		return
 	}
 
+	// Print the local IPv4 address
+	fmt.Printf("IPv4 broadcast address: %s\n", localIPv4)
+	
 	// Calculate the broadcast address
 	broadcastIP := calculateBroadcastAddress(localIPv4, subnetMask)
 	targetPort := 12345 // Arbitrary port
