@@ -6,7 +6,7 @@ import (
 )
 
 func calculateBroadcastAddress(ip net.IP, subnetMask net.IPMask) net.IP {
-	// Ensure the IP is IPV4
+	// Ensure the IP and subnetMask are IPv4
 	ip = ip.To4()
 	if ip == nil {
 		fmt.Println("Invalid IPv4 address.")
@@ -54,7 +54,7 @@ func main() {
 			switch v := addr.(type) {
 			case *net.IPNet:
 				ip := v.IP
-				if ip.To4() != nil {
+				if ip.To4() != nil && !ip.IsLoopback {
 					localIPv4 = ip
 					subnetMask = v.Mask
 					break
@@ -67,7 +67,7 @@ func main() {
 	}
 
 	if localIPv4 == nil {
-		fmt.Println("Could not find a suitable IPv4 network interface.")
+		fmt.Println("Could not find a suitable non-loopback IPv4 network interface.")
 		return
 	}
 
@@ -76,7 +76,7 @@ func main() {
 	targetPort := 12345 // Arbitrary port
 
 	// Print the target IPv4 address
-	fmt.Printf("Sending to IPv4 address: %s\n", broadcastIP)
+	fmt.Printf("Sending to IPv4 broadcast address: %s\n", broadcastIP)
 
 	// UDP address creation
 	targetAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", broadcastIP.String(), targetPort))
@@ -103,5 +103,6 @@ func main() {
 		return
 	}
 
-	fmt.Printf("Sent message: %s to broadcast address %s\n", message, broadcastIP)
+	fmt.Printf("Sent message: %s\n", message)
 }
+
