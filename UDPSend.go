@@ -54,7 +54,7 @@ func main() {
 			switch v := addr.(type) {
 			case *net.IPNet:
 				ip := v.IP
-				if ip.To4() != nil && ip.IsLoopback {
+				if ip.To4() != nil && ip.IsLoopback() {
 					localIPv4 = ip
 					subnetMask = v.Mask
 					break
