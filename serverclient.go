@@ -39,6 +39,8 @@ func calculateBroadcastAddress(ip net.IP, subnetMask net.IPMask) net.IP {
 }
 
 func main() {
+	// Declare so you can use in both GoRoutines
+	var localIPv4 net.IP
 	// Set Priority
 	//var priority int
 	if len(os.Args) != 2 {
@@ -110,7 +112,7 @@ func main() {
 			return
 		}
 
-		var localIPv4 net.IP
+		//var localIPv4 net.IP
 		var subnetMask net.IPMask
 
 		for _, iface := range interfaces {
