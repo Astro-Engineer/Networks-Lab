@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"strings"
 	"syscall"
+	"strconv"
 )
 
 func calculateBroadcastAddress(ip net.IP, subnetMask net.IPMask) net.IP {
@@ -38,6 +39,19 @@ func calculateBroadcastAddress(ip net.IP, subnetMask net.IPMask) net.IP {
 }
 
 func main() {
+	// Set Priority
+	if len(os.Args) != 2 {
+		fmt.Println("Usage: ./program <target_port>")
+		return
+	}
+
+	// Parse the target port from command-line arguments
+	targetPort, err := strconv.Atoi(os.Args[1])
+	if err != nil {
+		fmt.Println("Error parsing target port:", err)
+		return
+	}
+	
 	listenIP := "0.0.0.0" // Listen on all available network interfaces
 	listenPort := 12345
 
