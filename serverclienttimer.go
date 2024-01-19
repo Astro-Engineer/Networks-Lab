@@ -159,7 +159,7 @@ func main() {
 			// Ignore msgs from self
 			if !addr.IP.Equal(localIPv4) {
 			    fmt.Printf("Received message '%s' from %s\n", receivedMessage, addr)
-				parts := strings.Split(inputString, ",")
+				parts := strings.Split(receivedMessage, ",")
 
 				if len(parts) == 2 {
 					// Extract the char and int values
