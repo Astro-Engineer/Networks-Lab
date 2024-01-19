@@ -195,8 +195,7 @@ func main() {
 
 					if charValue == "E" && intValue > priority {
 						setElectionLock(true)
-					}
-					else if charValue == "V" {
+					} else if charValue == "V" {
 						setElectionLock(false)
 					}
 				} else {
