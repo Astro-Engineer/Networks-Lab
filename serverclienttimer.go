@@ -298,7 +298,7 @@ func main() {
 							return
 						}
 				
-						//var localIPv4 net.IP
+						var localIPv4 net.IP
 						var subnetMask net.IPMask
 				
 						for _, iface := range interfaces {
