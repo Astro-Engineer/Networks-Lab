@@ -180,7 +180,7 @@ func main() {
 			return
 		}
 
-		//var localIPv4 net.IP
+		var localIPv4 net.IP
 		var subnetMask net.IPMask
 		fmt.Printf("Subnet Mask Check 1: %s\n", subnetMask)
 
