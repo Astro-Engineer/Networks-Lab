@@ -193,10 +193,10 @@ func main() {
 					// Print the parsed values
 					fmt.Printf("Char: %s\nInt: %d\n", charValue, intValue)
 
-					if charValue == "E" && intValue > priority
+					if charValue == "E" && intValue > priority {
 						setElectionLock(true)
 					}
-					else if charValue == "V"
+					else if charValue == "V" {
 						setElectionLock(false)
 					}
 				} else {
