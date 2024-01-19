@@ -98,7 +98,11 @@ func calculateBroadcastAddress(ip net.IP, subnetMask net.IPMask) net.IP {
 
 func main() {
 	timer := NewTimer()
+	
 	// Declare so you can use in both GoRoutines
+
+	timer.Start()
+	timer.Stop()
 	var localIPv4 net.IP
 	// Set Priority
 	//var priority int
