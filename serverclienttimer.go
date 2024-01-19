@@ -69,6 +69,23 @@ func (t *Timer) countdown() {
 	}
 }
 
+var (
+	electionLock bool
+	mutex      sync.RWMutex
+)
+
+func setElectionLock(newValue bool) {
+	mutex.Lock()
+	defer mutex.Unlock()
+	electionLock = newValue
+}
+
+func getelectionLock() bool {
+	mutex.RLock()
+	defer mutex.RUnlock()
+	return electionLock
+}
+
 func calculateBroadcastAddress(ip net.IP, subnetMask net.IPMask) net.IP {
 	// Ensure the IP and subnetMask are IPv4
 	ip = ip.To4()
