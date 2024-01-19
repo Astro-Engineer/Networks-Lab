@@ -9,7 +9,65 @@ import (
 	"strings"
 	"syscall"
 	"strconv"
+	"timer"
+	"sync"
 )
+
+type TimerState int
+
+const (
+	Dormant TimerState = iota
+	CountingDown
+)
+
+type Timer struct {
+	state   TimerState
+	mutex   sync.Mutex
+	trigger chan bool
+}
+
+func NewTimer() *Timer {
+	return &Timer{
+		state:   Dormant,
+		trigger: make(chan bool),
+	}
+}
+
+func (t *Timer) Start() {
+	t.mutex.Lock()
+	defer t.mutex.Unlock()
+
+	if t.state == Dormant {
+		t.state = CountingDown
+		fmt.Println("Timer started.")
+		go t.countdown()
+	}
+}
+
+func (t *Timer) Stop() {
+	t.mutex.Lock()
+	defer t.mutex.Unlock()
+
+	if t.state == CountingDown {
+		t.state = Dormant
+		fmt.Println("Timer stopped.")
+	}
+}
+
+func (t *Timer) countdown() {
+	timer := time.NewTimer(3 * time.Second)
+
+	select {
+	case <-timer.C:
+		t.mutex.Lock()
+		defer t.mutex.Unlock()
+
+		if t.state == CountingDown {
+			t.state = Dormant
+			fmt.Println("Timer expired. Performing action.")
+		}
+	}
+}
 
 func calculateBroadcastAddress(ip net.IP, subnetMask net.IPMask) net.IP {
 	// Ensure the IP and subnetMask are IPv4
@@ -39,6 +97,7 @@ func calculateBroadcastAddress(ip net.IP, subnetMask net.IPMask) net.IP {
 }
 
 func main() {
+	timer := NewTimer()
 	// Declare so you can use in both GoRoutines
 	var localIPv4 net.IP
 	// Set Priority
