@@ -290,7 +290,7 @@ func main() {
 					if charValue == "E" && intValue > priority {
 						timer.Stop()
 						setElectionLock(true)
-					} else if charValue == "E" && intValue > priority {
+					} else if charValue == "E" && intValue < priority {
 						interfaces, err := net.Interfaces()
 						if err != nil {
 							fmt.Println("Error:", err)
