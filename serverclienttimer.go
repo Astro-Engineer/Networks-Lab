@@ -159,6 +159,25 @@ func main() {
 			// Ignore msgs from self
 			if !addr.IP.Equal(localIPv4) {
 			    fmt.Printf("Received message '%s' from %s\n", receivedMessage, addr)
+				parts := strings.Split(inputString, ",")
+
+				if len(parts) == 2 {
+					// Extract the char and int values
+					charValue := parts[0]
+					intStr := parts[1]
+			
+					// Convert the int string to an actual integer
+					intValue, err := strconv.Atoi(intStr)
+					if err != nil {
+						fmt.Println("Error converting int:", err)
+						return
+					}
+			
+					// Print the parsed values
+					fmt.Printf("Char: %s\nInt: %d\n", charValue, intValue)
+				} else {
+					fmt.Println("Invalid input string format")
+				}
 		        } else {
 		            fmt.Println("Ignoring message from self.")
 		        }
