@@ -24,13 +24,21 @@ type Timer struct {
 	state   TimerState
 	mutex   sync.Mutex
 	trigger chan bool
+	callback func()
 }
 
 func NewTimer() *Timer {
 	return &Timer{
 		state:   Dormant,
 		trigger: make(chan bool),
+		callback: nil,
 	}
+}
+
+func (t *Timer) SetCallback(callback func()) {
+	t.mutex.Lock()
+	defer t.mutex.Unlock()
+	t.callback = callback
 }
 
 func (t *Timer) Start() {
@@ -65,6 +73,9 @@ func (t *Timer) countdown() {
 		if t.state == CountingDown {
 			t.state = Dormant
 			fmt.Println("Timer expired. Performing action.")
+			if t.callback != nil {
+				t.callback()
+			}
 		}
 	}
 }
@@ -114,12 +125,7 @@ func calculateBroadcastAddress(ip net.IP, subnetMask net.IPMask) net.IP {
 }
 
 func main() {
-	timer := NewTimer()
-	
-	// Declare so you can use in both GoRoutines
 
-	timer.Start()
-	timer.Stop()
 	var localIPv4 net.IP
 	// Set Priority
 	//var priority int
@@ -162,6 +168,94 @@ func main() {
 	signalCh := make(chan os.Signal, 1)
 	signal.Notify(signalCh, syscall.SIGINT, syscall.SIGTERM)
 
+	timer := NewTimer()
+	
+	// Declare so you can use in both GoRoutines
+	timer.SetCallback(func() {
+		fmt.Println("Executing main function action.")
+		// Add your main function action here
+		interfaces, err := net.Interfaces()
+		if err != nil {
+			fmt.Println("Error:", err)
+			return
+		}
+
+		//var localIPv4 net.IP
+		var subnetMask net.IPMask
+
+		for _, iface := range interfaces {
+			addrs, err := iface.Addrs()
+			if err != nil {
+				fmt.Println("Error:", err)
+				continue
+			}
+
+			for _, addr := range addrs {
+				switch v := addr.(type) {
+				case *net.IPNet:
+					ip := v.IP
+					if ip.To4() != nil && !ip.IsLoopback() {
+						localIPv4 = ip
+						subnetMask = v.Mask
+						break
+					}
+				}
+			}
+			if localIPv4 != nil {
+				break
+			}
+		}
+
+		if localIPv4 == nil {
+			fmt.Println("Could not find a suitable non-loopback IPv4 network interface.")
+			return
+		}
+
+		// Print the local IPv4 address
+		fmt.Printf("IPv4 broadcast address: %s\n", localIPv4)
+		// Print the subnet mask
+		fmt.Printf("Subnet Mask: %s\n", subnetMask)
+
+		// Calculate the broadcast address
+		broadcastIP := calculateBroadcastAddress(localIPv4, subnetMask)
+		targetPort := 12345 // Arbitrary port
+
+		// Print the target IPv4 address
+		fmt.Printf("Sending to IPv4 broadcast address: %s\n", broadcastIP)
+
+		// UDP address creation
+		targetAddr, err := net.ResolveUDPAddr("udp", fmt.Sprintf("%s:%d", broadcastIP.String(), targetPort))
+		if err != nil {
+			fmt.Println("Error resolving address:", err)
+			return
+		}
+
+		// UDP connection
+		sendConn, err := net.DialUDP("udp", nil, targetAddr)
+		if err != nil {
+			fmt.Println("Error creating UDP connection:", err)
+			return
+		}
+		defer sendConn.Close()
+
+		message := "V," + strconv.Itoa(priority)
+				messageBytes := []byte(message)
+	
+				// Check if the user input is not empty
+				if strings.TrimSpace(message) != "" {
+					// Send message
+					_, err := sendConn.Write(messageBytes)
+					if err != nil {
+						fmt.Println("Error sending message:", err)
+						return
+					}
+				}
+		
+	})
+	
+	timer.Start()
+	timer.Stop()
+	
 	// Goroutine to handle incoming messages
 	go func() {
 		for {
