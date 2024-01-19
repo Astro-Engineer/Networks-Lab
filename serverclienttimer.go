@@ -278,7 +278,7 @@ func main() {
 		// Start a goroutine to listen for user input
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
-			if !getElectionLock()
+			if !getElectionLock() {
 				// Change this behavior to periodically (we are using the scanner so we can control when the node sends msgs)
 				message := "E," + strconv.Itoa(priority)
 				messageBytes := []byte(message)
