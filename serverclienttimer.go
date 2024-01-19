@@ -182,6 +182,7 @@ func main() {
 
 		//var localIPv4 net.IP
 		var subnetMask net.IPMask
+		fmt.Printf("Subnet Mask Check 1: %s\n", subnetMask)
 
 		for _, iface := range interfaces {
 			addrs, err := iface.Addrs()
