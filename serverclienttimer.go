@@ -373,7 +373,7 @@ func main() {
 						
 					} else if charValue == "V" {
 						setElectionLock(false)
-						fmt.Printf("The leader's priority number is: %d\n", charValue, intValue)
+						fmt.Printf("The leader's priority number is: %d\n", intValue)
 					}
 				} else {
 					fmt.Println("Invalid input string format")
