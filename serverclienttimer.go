@@ -80,7 +80,7 @@ func setElectionLock(newValue bool) {
 	electionLock = newValue
 }
 
-func getelectionLock() bool {
+func getElectionLock() bool {
 	mutex.RLock()
 	defer mutex.RUnlock()
 	return electionLock
@@ -192,6 +192,13 @@ func main() {
 			
 					// Print the parsed values
 					fmt.Printf("Char: %s\nInt: %d\n", charValue, intValue)
+
+					if charValue == "E" && intValue > priority
+						setElectionLock(true)
+					}
+					else if charValue == "V"
+						setElectionLock(false)
+					}
 				} else {
 					fmt.Println("Invalid input string format")
 				}
@@ -272,17 +279,19 @@ func main() {
 		// Start a goroutine to listen for user input
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
-			// Change this behavior to periodically (we are using the scanner so we can control when the node sends msgs)
-			message := "E," + strconv.Itoa(priority)
-			messageBytes := []byte(message)
-
-			// Check if the user input is not empty
-			if strings.TrimSpace(message) != "" {
-				// Send message
-				_, err := sendConn.Write(messageBytes)
-				if err != nil {
-					fmt.Println("Error sending message:", err)
-					return
+			if !getElectionLock()
+				// Change this behavior to periodically (we are using the scanner so we can control when the node sends msgs)
+				message := "E," + strconv.Itoa(priority)
+				messageBytes := []byte(message)
+	
+				// Check if the user input is not empty
+				if strings.TrimSpace(message) != "" {
+					// Send message
+					_, err := sendConn.Write(messageBytes)
+					if err != nil {
+						fmt.Println("Error sending message:", err)
+						return
+					}
 				}
 			}
 		}
