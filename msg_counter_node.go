@@ -30,7 +30,6 @@ func main() {
         }
         msg_count ++;
 
-        // Print the received message
         fmt.Printf("Received %d bytes from %s: %s\n", n, clientAddr, string(buffer[:n]))
         fmt.Printf("Total msgs %d\n", msg_count)
     }
