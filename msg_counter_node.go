@@ -33,8 +33,7 @@ func main() {
         firstChar := buffer[0]
         if(firstChar == 'V') {
             fmt.Printf("Election ended, final count: %d\n\n\n", msg_count)
-        }
-        else {
+        } else {
             fmt.Printf("Received %d bytes from %s: %s\n", n, clientAddr, string(buffer[:n]))
             fmt.Printf("Current msgs %d\n", msg_count)
         }
