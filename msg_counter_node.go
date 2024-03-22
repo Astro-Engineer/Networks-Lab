@@ -21,7 +21,7 @@ func main() {
     fmt.Println("UDP server started on port 12345")
 
     buffer := make([]byte, 1024)
-    var total_msg = 0;
+    var msg_count = 0;
     for {
         n, clientAddr, err := conn.ReadFromUDP(buffer)
         if err != nil {
